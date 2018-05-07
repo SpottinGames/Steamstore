@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -26,4 +27,23 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function getId()
+    {
+        return $this->id;
+    }
+    public function games()
+    {
+        return DB::table('library')
+              ->where('user_id', $this->id)
+              ->join('games', 'game_id', '=', 'games.id')
+              ->get();
+    }
+    public function isInLibrary()
+    {
+    }
+    public function reviews()
+    {
+        return $this->hasMany('App\Review');
+    }
 }
